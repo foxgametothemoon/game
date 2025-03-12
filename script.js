@@ -17,6 +17,8 @@ const PLAYER_HEIGHT = 120;
 const COLLECTIBLE_SIZE = 50;
 const OBSTACLE_SCALE_FACTOR = 0.8; // Determines how quickly obstacles get closer together
 
+let gameInitialized = false; 
+
 // Game State
 let game = {
   canvas: null,
@@ -761,7 +763,8 @@ function loadGameAssets() {
 
 // Update loading progress
 function updateLoadingProgress() {
-  if (assets.loaded >= assets.total) {
+  if (assets.loaded >= assets.total && !gameInitialized) {
+    gameInitialized = true; // Ensure this runs only once
     assets.createPlaceholders();
     setTimeout(() => {
       showStartScreen();
@@ -1219,6 +1222,15 @@ function resetGameState() {
   game.lastTimestamp = 0; // Reset timestamp
   game.deltaTime = 0; // Reset deltaTime
 
+   // Clear and reset background layers
+   game.backgroundLayers = [];
+   game.backgroundLayers.push(
+     new BackgroundLayer(assets.images.background1, 0.5),
+     new BackgroundLayer(assets.images.background2, 1),
+     new BackgroundLayer(assets.images.background3, 2)
+   );
+ 
+
   // Clear game objects
   game.obstacles = [];
   game.collectibles = [];
@@ -1259,24 +1271,25 @@ function endGame() {
 }
 
 function restartGame() {
-  localStorage.setItem("restart", true);
-  document.location.reload();
+  // localStorage.setItem("restart", true);
+  // document.location.reload();
 
-  // // Hide game over screen
-  // document.getElementById("gameOverScreen").classList.add("hidden");
+  // Hide game over screen
+  document.getElementById("gameOverScreen").classList.add("hidden");
 
-  // // Reset game state
-  // resetGameState();
+  // Reset game state
+  resetGameState();
 
-  // // Show game UI and start the game
-  // document.getElementById("gameUI").classList.remove("hidden");
-  // document.getElementById("pauseButton").classList.remove("hidden");
-  // game.isRunning = true;
+  // Show game UI and start the game
+  document.getElementById("gameUI").classList.remove("hidden");
+  document.getElementById("pauseButton").classList.remove("hidden");
+  game.isRunning = true;
 
-  // // Play background music
-  // //playBackgroundMusic();
+  // Play background music
+  playBackgroundMusic();
 
-  // gameLoop(performance.now());
+  // Start game loop
+  gameLoop(performance.now());
 }
 
 function quitGame() {
