@@ -8,7 +8,7 @@ const GAME_WIDTH = 1280;
 const GAME_HEIGHT = 720;
 const GRAVITY = 1.5;
 const JUMP_FORCE = -30;
-const RUN_SPEED = 6;
+let RUN_SPEED = 9;
 const INITIAL_OBSTACLE_SPACING = 1000; //make it 1000
 const MIN_OBSTACLE_SPACING = 400;
 const GROUND_HEIGHT = 100;
@@ -499,7 +499,7 @@ class Collectible {
   }
 
   update() {
-    if (this.attractedToPlayer && game.player.magnetActive) {
+    if (game.player.magnetActive) {
       // Calculate direction to player
       const playerX = game.player.x + game.player.width / 2;
       const playerY = game.player.y + game.player.height / 2;
@@ -726,9 +726,9 @@ function initGame() {
 // Load game assets
 function loadGameAssets() {
   // Load images
-  assets.loadImage("playerRun", "assets/images/player-run.svg");
-  assets.loadImage("playerJump", "assets/images/player-jump.svg");
-  assets.loadImage("playerSlide", "assets/images/player-slide.svg");
+  assets.loadImage("playerRun", "assets/images/player-run.png");
+  assets.loadImage("playerJump", "assets/images/player-jump.png");
+  assets.loadImage("playerSlide", "assets/images/player-slide.png");
   assets.loadImage("cherry", "assets/images/cherry.svg");
   assets.loadImage("foxCoin", "assets/images/fox-coin.svg");
   assets.loadImage("obstacle1", "assets/images/obstacle1.svg");
@@ -1002,6 +1002,9 @@ function updateGame() {
   const obstacleSpacing =
     INITIAL_OBSTACLE_SPACING -
     (INITIAL_OBSTACLE_SPACING - MIN_OBSTACLE_SPACING) * difficulty;
+
+  // Speed scaling
+  RUN_SPEED = 6 + difficulty * 4; // Increase speed up to 10
 }
 
 function drawGame() {
@@ -1033,6 +1036,8 @@ function checkCollisions() {
       } else {
         game.player.hasShield = false;
         removePowerUp("shield");
+        // Remove the obstacle after collision with shield
+        game.obstacles = game.obstacles.filter((obs) => obs !== obstacle);
       }
     }
   });
