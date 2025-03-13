@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Tail -->
+  <path d="M20,100 C30,70 50,80 60,95 C70,110 70,140 50,130 C30,120 10,130 20,100" fill="#FF8800" stroke="#FF5500" stroke-width="2"/>
+  <path d="M30,100 C35,80 50,90 55,100 C60,110 55,125 45,120 C35,115 25,120 30,100" fill="#FFAA00" stroke="#FF5500" stroke-width="1"/>
+  
+  <!-- Body -->
+  <ellipse cx="100" cy="110" rx="40" ry="25" fill="#FF6600" stroke="#FF4400" stroke-width="2"/>
+  <ellipse cx="100" cy="110" rx="30" ry="18" fill="#FF8800" stroke="#FF4400" stroke-width="1"/>
+  
+  <!-- Legs -->
+  <rect x="70" y="130" width="8" height="20" rx="4" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  <rect x="85" y="130" width="8" height="25" rx="4" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  <rect x="110" y="130" width="8" height="20" rx="4" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  <rect x="125" y="130" width="8" height="25" rx="4" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  
+  <!-- Head -->
+  <ellipse cx="140" cy="95" rx="25" ry="20" fill="#FF7700" stroke="#FF5500" stroke-width="2"/>
+  
+  <!-- Ears -->
+  <polygon points="125,80 130,60 140,75" fill="#FFAA00" stroke="#FF5500" stroke-width="1"/>
+  <polygon points="145,75 155,60 160,80" fill="#FFAA00" stroke="#FF5500" stroke-width="1"/>
+  
+  <!-- Face -->
+  <ellipse cx="150" cy="95" rx="10" ry="8" fill="#FFBB00" stroke="#FF5500" stroke-width="1"/>
+  
+  <!-- Eyes -->
+  <circle cx="135" cy="90" r="3" fill="#000"/>
+  <circle cx="150" cy="90" r="3" fill="#000"/>
+  
+  <!-- Nose -->
+  <circle cx="158" cy="95" r="3" fill="#000"/>
+  
+  <!-- Mouth -->
+  <path d="M150,98 C153,102 158,102 160,98" fill="none" stroke="#000" stroke-width="1"/>
+  
+  <!-- Whiskers -->
+  <line x1="158" y1="95" x2="170" y2="92" stroke="#000" stroke-width="1"/>
+  <line x1="158" y1="95" x2="170" y2="95" stroke="#000" stroke-width="1"/>
+  <line x1="158" y1="95" x2="170" y2="98" stroke="#000" stroke-width="1"/>
+  
+  <!-- Neon glow effect -->
+  <ellipse cx="100" cy="110" rx="45" ry="30" fill="none" stroke="#FFCC00" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="140" cy="95" rx="30" ry="25" fill="none" stroke="#FFCC00" stroke-width="1" opacity="0.5"/>
+</svg>

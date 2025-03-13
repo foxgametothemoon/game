@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Tail - stretched out behind -->
+  <path d="M10,130 C20,110 40,110 50,115 C60,120 55,130 45,135 C35,140 0,150 10,130" fill="#FF8800" stroke="#FF5500" stroke-width="2"/>
+  <path d="M20,130 C25,120 40,120 45,122 C50,125 47,130 40,132 C33,135 15,140 20,130" fill="#FFAA00" stroke="#FF5500" stroke-width="1"/>
+  
+  <!-- Body - elongated and low for sliding -->
+  <ellipse cx="100" cy="135" rx="50" ry="15" fill="#FF6600" stroke="#FF4400" stroke-width="2"/>
+  <ellipse cx="100" cy="135" rx="40" ry="10" fill="#FF8800" stroke="#FF4400" stroke-width="1"/>
+  
+  <!-- Legs - tucked under body -->
+  <rect x="80" y="145" width="8" height="10" rx="4" transform="rotate(90, 80, 145)" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  <rect x="95" y="145" width="8" height="10" rx="4" transform="rotate(90, 95, 145)" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  <rect x="110" y="145" width="8" height="10" rx="4" transform="rotate(90, 110, 145)" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  <rect x="125" y="145" width="8" height="10" rx="4" transform="rotate(90, 125, 145)" fill="#FF5500" stroke="#FF3300" stroke-width="1"/>
+  
+  <!-- Head - stretched forward -->
+  <ellipse cx="150" cy="130" rx="25" ry="15" fill="#FF7700" stroke="#FF5500" stroke-width="2"/>
+  
+  <!-- Ears - slicked back -->
+  <polygon points="135,120 140,110 145,120" fill="#FFAA00" stroke="#FF5500" stroke-width="1"/>
+  <polygon points="150,120 155,110 160,120" fill="#FFAA00" stroke="#FF5500" stroke-width="1"/>
+  
+  <!-- Face -->
+  <ellipse cx="160" cy="130" rx="10" ry="8" fill="#FFBB00" stroke="#FF5500" stroke-width="1"/>
+  
+  <!-- Eyes - determined -->
+  <ellipse cx="145" cy="125" rx="3" ry="2" fill="#000"/>
+  <ellipse cx="160" cy="125" rx="3" ry="2" fill="#000"/>
+  
+  <!-- Nose -->
+  <circle cx="168" cy="130" r="3" fill="#000"/>
+  
+  <!-- Mouth - determined -->
+  <line x1="160" y1="133" x2="167" y2="133" stroke="#000" stroke-width="1"/>
+  
+  <!-- Whiskers -->
+  <line x1="168" y1="130" x2="180" y2="127" stroke="#000" stroke-width="1"/>
+  <line x1="168" y1="130" x2="180" y2="130" stroke="#000" stroke-width="1"/>
+  <line x1="168" y1="130" x2="180" y2="133" stroke="#000" stroke-width="1"/>
+  
+  <!-- Motion/slide lines -->
+  <path d="M50,150 C80,150 120,150 150,150" fill="none" stroke="#FFCC00" stroke-width="1" stroke-dasharray="5,3" opacity="0.7"/>
+  <path d="M60,155 C90,155 130,155 160,155" fill="none" stroke="#FFCC00" stroke-width="1" stroke-dasharray="5,3" opacity="0.7"/>
+  <path d="M40,145 C70,145 110,145 140,145" fill="none" stroke="#FFCC00" stroke-width="1" stroke-dasharray="5,3" opacity="0.7"/>
+  
+  <!-- Dust/particles -->
+  <circle cx="60" cy="150" r="2" fill="#FFCC00" opacity="0.6"/>
+  <circle cx="40" cy="155" r="1" fill="#FFCC00" opacity="0.6"/>
+  <circle cx="70" cy="145" r="1.5" fill="#FFCC00" opacity="0.6"/>
+  <circle cx="50" cy="155" r="1" fill="#FFCC00" opacity="0.6"/>
+  
+  <!-- Neon glow effect -->
+  <ellipse cx="100" cy="135" rx="55" ry="20" fill="none" stroke="#FFCC00" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="150" cy="130" rx="30" ry="20" fill="none" stroke="#FFCC00" stroke-width="1" opacity="0.5"/>
+</svg>

@@ -9,15 +9,15 @@ const GAME_HEIGHT = 720;
 const GRAVITY = 1.5;
 const JUMP_FORCE = -30;
 const RUN_SPEED = 6;
-const INITIAL_OBSTACLE_SPACING = 1000;
+const INITIAL_OBSTACLE_SPACING = 1000; //make it 1000
 const MIN_OBSTACLE_SPACING = 400;
 const GROUND_HEIGHT = 100;
-const PLAYER_WIDTH = 80;
-const PLAYER_HEIGHT = 120;
+const PLAYER_WIDTH = 200;
+const PLAYER_HEIGHT = 200;
 const COLLECTIBLE_SIZE = 50;
 const OBSTACLE_SCALE_FACTOR = 0.8; // Determines how quickly obstacles get closer together
 
-let gameInitialized = false; 
+let gameInitialized = false;
 
 // Game State
 let game = {
@@ -195,17 +195,13 @@ const assets = {
 // Class definitions
 class Player {
   constructor() {
-    this.width = PLAYER_WIDTH;
-    this.height = PLAYER_HEIGHT;
+    this.width = 100; // Adjusted width to match SVG
+    this.height = 100; // Adjusted height to match SVG
     this.x = 200;
     this.y = GAME_HEIGHT - GROUND_HEIGHT - this.height;
     this.velocityY = 0;
     this.isJumping = false;
     this.isSliding = false;
-    this.frameX = 0;
-    this.frameY = 0;
-    this.maxFrameX = 5; // Number of frames in the run animation
-    this.animationSpeed = 4; // Frames to skip before updating animation
     this.hasShield = false;
     this.magnetActive = false;
     this.magnetRadius = 200;
@@ -227,57 +223,54 @@ class Player {
       this.isJumping = false;
     }
 
-    // Update animation frames
-    if (game.frameCount % this.animationSpeed === 0) {
-      this.frameX = (this.frameX + 1) % this.maxFrameX;
-    }
-
     // Update hitbox based on sliding state
     if (this.isSliding) {
-      this.height = PLAYER_HEIGHT / 2;
+      this.height = 50; // Adjusted height for sliding
     } else {
-      this.height = PLAYER_HEIGHT;
+      this.height = 100; // Adjusted height for running/jumping
     }
   }
 
   draw(ctx) {
+    const yOffset = 30; // Adjust this value to move the SVG down
+
     // Draw player sprite based on state
     if (this.isJumping) {
       ctx.drawImage(
         assets.images.playerJump,
         0,
         0,
-        this.width,
-        PLAYER_HEIGHT,
+        200,
+        200,
         this.x,
-        this.y,
+        this.y + yOffset,
         this.width,
-        PLAYER_HEIGHT
+        this.height
       );
     } else if (this.isSliding) {
       ctx.drawImage(
         assets.images.playerSlide,
         0,
         0,
-        this.width,
-        PLAYER_HEIGHT / 2,
+        200,
+        200,
         this.x,
-        this.y,
+        this.y + yOffset,
         this.width,
-        PLAYER_HEIGHT / 2
+        this.height
       );
     } else {
-      // Run animation
+      // Running state
       ctx.drawImage(
         assets.images.playerRun,
-        this.frameX * this.width,
         0,
-        this.width,
-        PLAYER_HEIGHT,
+        0,
+        200,
+        200,
         this.x,
-        this.y,
+        this.y + yOffset,
         this.width,
-        PLAYER_HEIGHT
+        this.height
       );
     }
 
@@ -286,7 +279,7 @@ class Player {
       ctx.beginPath();
       ctx.arc(
         this.x + this.width / 2,
-        this.y + this.height / 2,
+        this.y + this.height / 2 + yOffset,
         this.width / 1.5,
         0,
         Math.PI * 2
@@ -299,7 +292,7 @@ class Player {
       ctx.beginPath();
       ctx.arc(
         this.x + this.width / 2,
-        this.y + this.height / 2,
+        this.y + this.height / 2 + yOffset,
         this.width / 1.5 + 5,
         0,
         Math.PI * 2
@@ -314,7 +307,7 @@ class Player {
       ctx.beginPath();
       ctx.arc(
         this.x + this.width / 2,
-        this.y + this.height / 2,
+        this.y + this.height / 2 + yOffset,
         this.magnetRadius,
         0,
         Math.PI * 2
@@ -328,7 +321,7 @@ class Player {
     if (game.debug) {
       ctx.strokeStyle = "red";
       ctx.lineWidth = 2;
-      ctx.strokeRect(this.x, this.y, this.width, this.height);
+      ctx.strokeRect(this.x, this.y + yOffset, this.width, this.height);
     }
   }
 
@@ -342,7 +335,12 @@ class Player {
   }
 
   slide() {
-    if (!this.isSliding && !this.isJumping) {
+    if (this.isJumping) {
+      // Bring the player to the ground if jumping
+      this.isJumping = false;
+      this.y = GAME_HEIGHT - GROUND_HEIGHT - this.height;
+    } else if (!this.isSliding) {
+      // Slide if not already sliding
       this.isSliding = true;
       playSound("slide");
 
@@ -393,26 +391,26 @@ class Obstacle {
     // Set properties based on type
     switch (type) {
       case "low":
-        this.width = 60; // Reduced from 100
-        this.height = 60; // Reduced from 100
+        this.width = 70; // Reduced from 100
+        this.height = 70; // Reduced from 100
         this.y = GAME_HEIGHT - GROUND_HEIGHT - this.height;
         this.image = assets.images.obstacle1;
         break;
       case "high":
-        this.width = 60; // Reduced from 100
-        this.height = 120; // Reduced from 200
+        this.width = 70; // Reduced from 100
+        this.height = 70; // Reduced from 200
         this.y = GAME_HEIGHT - GROUND_HEIGHT - this.height;
         this.image = assets.images.obstacle2;
         break;
       case "floating":
-        this.width = 60; // Reduced from 100
-        this.height = 60; // Reduced from 100
+        this.width = 70; // Reduced from 100
+        this.height = 70; // Reduced from 100
         this.y = GAME_HEIGHT - GROUND_HEIGHT - this.height - 150;
         this.image = assets.images.obstacle1;
         break;
       default:
-        this.width = 60; // Reduced from 100
-        this.height = 60; // Reduced from 100
+        this.width = 70; // Reduced from 100
+        this.height = 70; // Reduced from 100
         this.y = GAME_HEIGHT - GROUND_HEIGHT - this.height;
         this.image = assets.images.obstacle1;
     }
@@ -425,20 +423,20 @@ class Obstacle {
   draw(ctx) {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 
-    // Add neon glow based on obstacle type
-    ctx.beginPath();
-    ctx.rect(this.x, this.y, this.width, this.height);
+    // // Add neon glow based on obstacle type
+    // ctx.beginPath();
+    // ctx.rect(this.x, this.y, this.width, this.height);
 
-    if (this.type === "low") {
-      ctx.strokeStyle = "rgba(0, 255, 157, 0.8)";
-    } else if (this.type === "high") {
-      ctx.strokeStyle = "rgba(201, 0, 255, 0.8)";
-    } else {
-      ctx.strokeStyle = "rgba(0, 243, 255, 0.8)";
-    }
+    // if (this.type === "low") {
+    //   ctx.strokeStyle = "rgba(0, 255, 157, 0.8)";
+    // } else if (this.type === "high") {
+    //   ctx.strokeStyle = "rgba(201, 0, 255, 0.8)";
+    // } else {
+    //   ctx.strokeStyle = "rgba(0, 243, 255, 0.8)";
+    // }
 
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    // ctx.lineWidth = 4;
+    // ctx.stroke();
 
     // Debug hitbox
     if (game.debug) {
@@ -545,16 +543,6 @@ class Collectible {
       0,
       Math.PI * 2
     );
-
-    if (this.type === "cherry") {
-      ctx.fillStyle = "rgba(255, 0, 85, 0.2)";
-    } else if (this.type === "foxCoin") {
-      ctx.fillStyle = "rgba(255, 204, 0, 0.2)";
-    } else {
-      ctx.fillStyle = "rgba(0, 255, 157, 0.2)";
-    }
-
-    ctx.fill();
 
     // Debug hitbox
     if (game.debug) {
@@ -738,19 +726,19 @@ function initGame() {
 // Load game assets
 function loadGameAssets() {
   // Load images
-  assets.loadImage("playerRun", "assets/images/player-run.png");
-  assets.loadImage("playerJump", "assets/images/player-jump.png");
-  assets.loadImage("playerSlide", "assets/images/player-slide.png");
-  assets.loadImage("cherry", "assets/images/cherry.png");
-  assets.loadImage("foxCoin", "assets/images/fox-coin.png");
-  assets.loadImage("obstacle1", "assets/images/obstacle1.png");
-  assets.loadImage("obstacle2", "assets/images/obstacle2.png");
-  assets.loadImage("background1", "assets/images/bg-layer1.png");
-  assets.loadImage("background2", "assets/images/bg-layer2.png");
-  assets.loadImage("background3", "assets/images/bg-layer3.png");
-  assets.loadImage("speedBoost", "assets/images/speed-boost.png");
-  assets.loadImage("shield", "assets/images/shield.png");
-  assets.loadImage("coinMagnet", "assets/images/coin-magnet.png");
+  assets.loadImage("playerRun", "assets/images/player-run.svg");
+  assets.loadImage("playerJump", "assets/images/player-jump.svg");
+  assets.loadImage("playerSlide", "assets/images/player-slide.svg");
+  assets.loadImage("cherry", "assets/images/cherry.svg");
+  assets.loadImage("foxCoin", "assets/images/fox-coin.svg");
+  assets.loadImage("obstacle1", "assets/images/obstacle1.svg");
+  assets.loadImage("obstacle2", "assets/images/obstacle2.svg");
+  assets.loadImage("background1", "assets/images/bg-layer1.jpg");
+  assets.loadImage("background2", "assets/images/bg-layer1.jpg");
+  assets.loadImage("background3", "assets/images/bg-layer1.jpg");
+  assets.loadImage("speedBoost", "assets/images/speed-boost.svg");
+  assets.loadImage("shield", "assets/images/shield.svg");
+  assets.loadImage("coinMagnet", "assets/images/coin-magnet.svg");
 
   // Load audio
   assets.loadAudio("jump", "assets/audio/jump.wav");
@@ -971,7 +959,6 @@ function gameLoop(timestamp) {
   }
 
   game.deltaTime = (timestamp - game.lastTimestamp) / 16.66667; // Normalize to 60fps
-  //console.log("DeltaTime:", game.deltaTime); // Debugging
   game.lastTimestamp = timestamp;
   game.frameCount++;
 
@@ -1222,40 +1209,33 @@ function resetGameState() {
   game.lastTimestamp = 0; // Reset timestamp
   game.deltaTime = 0; // Reset deltaTime
 
-   // Clear and reset background layers
-   game.backgroundLayers = [];
-   game.backgroundLayers.push(
-     new BackgroundLayer(assets.images.background1, 0.5),
-     new BackgroundLayer(assets.images.background2, 1),
-     new BackgroundLayer(assets.images.background3, 2)
-   );
- 
+  // Clear and reset background layers
+  game.backgroundLayers = [];
+  game.backgroundLayers.push(
+    new BackgroundLayer(assets.images.background1, 0.5),
+    new BackgroundLayer(assets.images.background2, 1),
+    new BackgroundLayer(assets.images.background3, 2)
+  );
 
   // Clear game objects
   game.obstacles = [];
   game.collectibles = [];
   game.activePowerUps = [];
-  game.backgroundLayers = [];
 
   // Reset player properties
   game.player = new Player();
   game.player.velocityY = 0; // Ensure velocity is reset
   game.player.isJumping = false; // Reset jumping state
   game.player.isSliding = false; // Reset sliding state
-  game.player.y = GAME_HEIGHT - GROUND_HEIGHT - PLAYER_HEIGHT; // Reset player position
+  game.player.hasShield = false; // Reset shield state
+  game.player.magnetActive = false; // Reset magnet state
+  game.player.y = GAME_HEIGHT - GROUND_HEIGHT - game.player.height; // Reset player position
 
   // Reset UI elements
   document.getElementById("distanceCounter").textContent = "0m";
   document.getElementById("cherryCounter").textContent = "0";
   document.getElementById("coinCounter").textContent = "0";
   document.getElementById("powerUpIndicator").classList.add("hidden");
-
-  // Reset background layers
-  game.backgroundLayers.push(
-    new BackgroundLayer(assets.images.background1, 0.5),
-    new BackgroundLayer(assets.images.background2, 1),
-    new BackgroundLayer(assets.images.background3, 2)
-  );
 
   // Reset initial spawn
   game.obstacles.push(new Obstacle(GAME_WIDTH * 0.5, "low"));
@@ -1267,13 +1247,10 @@ function endGame() {
   cancelAnimationFrame(game.animationFrameId);
   showGameOverScreen();
   playSound("death");
-  //stopBackgroundMusic(); // Stop background music
+  stopBackgroundMusic(); // Stop background music
 }
 
 function restartGame() {
-  // localStorage.setItem("restart", true);
-  // document.location.reload();
-
   // Hide game over screen
   document.getElementById("gameOverScreen").classList.add("hidden");
 

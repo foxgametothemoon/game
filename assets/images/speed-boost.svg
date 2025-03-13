@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150">
+  <!-- Transformed/tilted container for the entire can -->
+  <g transform="translate(60, 75) rotate(15) translate(-50, -75)">
+    <!-- Can body -->
+    <path d="M30,30 L30,120 C30,130 40,140 50,140 C60,140 70,130 70,120 L70,30 Z" fill="#0066CC" stroke="#003366" stroke-width="1"/>
+    
+    <!-- Can top -->
+    <ellipse cx="50" cy="30" rx="20" ry="7" fill="#0088FF" stroke="#003366" stroke-width="1"/>
+    <ellipse cx="50" cy="30" rx="15" ry="5" fill="#0066CC" stroke="#003366" stroke-width="1"/>
+    
+    <!-- Can pull tab -->
+    <path d="M55,25 L58,28 L55,31" fill="none" stroke="#DDDDDD" stroke-width="1.5"/>
+    <ellipse cx="55" cy="25" rx="2" ry="1" fill="#DDDDDD" stroke="#BBBBBB" stroke-width="0.5"/>
+    
+    <!-- Energy design elements -->
+    <path d="M38,45 L62,45 L60,120 L40,120 Z" fill="#0088FF" stroke="none"/>
+    
+    <!-- Lightning bolt logo -->
+    <path d="M45,50 L55,50 L50,75 L58,75 L42,110 L47,80 L38,80 Z" fill="#FFFFFF" stroke="#00AAFF" stroke-width="0.5"/>
+    
+    <!-- "ENERGY" text -->
+    <path d="M37,95 L63,95" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+    <path d="M37,100 L63,100" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+    <path d="M40,95 L40,100" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+    <path d="M50,95 L50,100" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+    <path d="M60,95 L60,100" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+    
+    <!-- Glowing effect -->
+    <ellipse cx="50" cy="75" rx="15" ry="25" fill="#00AAFF" opacity="0.3"/>
+    
+    <!-- Reflections -->
+    <path d="M35,40 C38,60 38,80 35,100" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+    <path d="M65,40 C62,60 62,80 65,100" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Droplets -->
+    <path d="M33,50 C31,48 31,45 33,43 C35,41 38,41 40,43" fill="none" stroke="#00AAFF" stroke-width="1"/>
+    <path d="M35,45 C34,44 34,42 35,41 C36,40 38,40 39,41" fill="none" stroke="#00AAFF" stroke-width="0.5"/>
+    <circle cx="32" cy="60" r="1" fill="#00AAFF"/>
+    <circle cx="33" cy="70" r="1.5" fill="#00AAFF"/>
+    <circle cx="32" cy="80" r="1" fill="#00AAFF"/>
+  </g>
+  
+  <!-- Shadow under tilted can -->
+  <ellipse cx="65" cy="140" rx="30" ry="5" fill="#000000" opacity="0.2"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 120">
+  <!-- Jagged rock formation -->
+  <path d="M20,100 L10,80 L25,60 L15,45 L30,30 L50,15 L70,25 L85,15 L100,25 L115,15 L130,40 L140,60 L125,80 L135,90 L120,100 Z" fill="#696969" stroke="#4A4A4A" stroke-width="1"/>
+  
+  <!-- Rock layers and strata -->
+  <path d="M25,60 L45,55 L70,60 L100,55 L125,60" fill="none" stroke="#777777" stroke-width="0.5"/>
+  <path d="M20,80 L50,75 L80,80 L110,75 L130,80" fill="none" stroke="#777777" stroke-width="0.5"/>
+  <path d="M30,30 L50,35 L70,30 L90,35 L115,30" fill="none" stroke="#777777" stroke-width="0.5"/>
+  
+  <!-- Cracks and details -->
+  <path d="M50,15 L55,45 L60,75 L65,100" fill="none" stroke="#4A4A4A" stroke-width="0.7"/>
+  <path d="M100,25 L95,50 L90,75 L85,100" fill="none" stroke="#4A4A4A" stroke-width="0.7"/>
+  <path d="M70,25 L80,40 L90,60 L85,80 L75,100" fill="none" stroke="#4A4A4A" stroke-width="0.5"/>
+  
+  <!-- Highlights and shadows -->
+  <path d="M40,20 L55,30 L70,40" fill="none" stroke="#999999" stroke-width="0.5"/>
+  <path d="M85,20 L100,35 L115,25" fill="none" stroke="#999999" stroke-width="0.5"/>
+  <path d="M30,70 L45,65 L60,70" fill="none" stroke="#999999" stroke-width="0.5"/>
+  <path d="M20,90 L40,85 L60,90" fill="none" stroke="#555555" stroke-width="0.5"/>
+  <path d="M80,90 L100,85 L120,90" fill="none" stroke="#555555" stroke-width="0.5"/>
+  
+  <!-- Small loose rocks -->
+  <polygon points="15,105 25,102 20,110" fill="#696969" stroke="#4A4A4A" stroke-width="0.5"/>
+  <polygon points="125,105 135,102 130,110" fill="#696969" stroke="#4A4A4A" stroke-width="0.5"/>
+  <ellipse cx="45" cy="108" rx="7" ry="4" fill="#696969" stroke="#4A4A4A" stroke-width="0.5"/>
+  <ellipse cx="100" cy="108" rx="9" ry="5" fill="#696969" stroke="#4A4A4A" stroke-width="0.5"/>
+</svg>

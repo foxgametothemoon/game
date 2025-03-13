@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100">
+  <!-- Large rock base -->
+  <path d="M20,80 L10,60 L30,40 L60,20 L90,25 L120,40 L140,60 L130,80 Z" fill="#777777" stroke="#555555" stroke-width="1"/>
+  
+  <!-- Rock texture and details -->
+  <path d="M30,40 L40,50 L70,30 L90,25" fill="none" stroke="#666666" stroke-width="0.5"/>
+  <path d="M60,20 L80,40 L110,50 L120,40" fill="none" stroke="#666666" stroke-width="0.5"/>
+  <path d="M90,25 L80,50 L90,65 L120,70 L140,60" fill="none" stroke="#666666" stroke-width="0.5"/>
+  <path d="M30,40 L40,70 L60,80 L80,75 L100,80 L130,80" fill="none" stroke="#666666" stroke-width="0.5"/>
+  
+  <!-- Highlights and shadows -->
+  <path d="M60,30 L80,35 L100,45" fill="none" stroke="#AAAAAA" stroke-width="0.5"/>
+  <path d="M40,60 L60,70 L90,65" fill="none" stroke="#AAAAAA" stroke-width="0.5"/>
+  <path d="M20,70 L40,75 L70,75" fill="none" stroke="#444444" stroke-width="0.5"/>
+  <path d="M100,60 L120,65 L130,70" fill="none" stroke="#444444" stroke-width="0.5"/>
+  
+  <!-- Small rocks around the base -->
+  <path d="M10,85 L15,80 L20,85 Z" fill="#777777" stroke="#555555" stroke-width="0.5"/>
+  <path d="M140,85 L145,80 L150,85 Z" fill="#777777" stroke="#555555" stroke-width="0.5"/>
+  <ellipse cx="40" cy="85" rx="8" ry="5" fill="#777777" stroke="#555555" stroke-width="0.5"/>
+  <ellipse cx="110" cy="85" rx="10" ry="6" fill="#777777" stroke="#555555" stroke-width="0.5"/>
+</svg>
