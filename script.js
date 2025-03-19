@@ -26,6 +26,42 @@ const currentScoreDisplay = document.getElementById("currentScore");
 const powerupBar = document.getElementById("powerupBar");
 const audioToggle = document.getElementById("audioToggle");
 
+let coinMagnetImage = new Image();
+coinMagnetImage.src = "assets/images/coin-magnet.svg";
+
+// Define probabilities for each type of collectible
+const cherryProbability = 0.6; // 60% chance
+const coinProbability = 0.2; // 20% chance
+const energyDrinkProbability = 0.1; // 10% chance
+const coinMagnetProbability = 0.1; // 10% chance
+
+// Function to get the current audio state from localStorage
+function getAudioState() {
+  const storedState = localStorage.getItem("audioEnabled");
+  if (storedState === null) {
+    return true; // Default to true if not set
+  }
+  return storedState === "true";
+}
+
+// Function to save the audio state to localStorage
+function setAudioState(enabled) {
+  localStorage.setItem("audioEnabled", enabled.toString());
+}
+
+// Function to update the audio toggle UI based on the audio state
+function updateAudioToggleUI(enabled) {
+  if (enabled) {
+    audioToggle.classList.remove("audio-off");
+  } else {
+    audioToggle.classList.add("audio-off");
+  }
+}
+
+// Initialize audio state from localStorage or default to true
+let audioEnabled = getAudioState();
+updateAudioToggleUI(audioEnabled); // Apply initial state
+
 function getCSSVariable(variableName) {
   return getComputedStyle(document.documentElement).getPropertyValue(
     variableName
@@ -91,9 +127,6 @@ let obstacleSpawnInterval = 2000; // Initial interval
 let powerupTimer = 0;
 let powerupDuration = 5000; // 5 seconds
 
-// Sound toggle
-let soundEnabled = true;
-
 // Add a flag for debug mode
 let debugMode = false;
 
@@ -120,9 +153,20 @@ closeLeaderboard.addEventListener("click", () => {
   leaderboardScreen.style.display = "none";
 });
 
+// Audio toggle event listener
 audioToggle.addEventListener("click", () => {
-  soundEnabled = !soundEnabled;
-  audioToggle.classList.toggle("audio-off", !soundEnabled);
+  audioEnabled = !audioEnabled;
+  setAudioState(audioEnabled);
+  updateAudioToggleUI(audioEnabled);
+
+  // Add your audio control logic here (e.g., mute/unmute audio)
+  if (audioEnabled) {
+    // Unmute audio
+    console.log("Audio Unmuted");
+  } else {
+    // Mute audio
+    console.log("Audio Muted");
+  }
 });
 
 // Event listener to toggle debug mode
@@ -141,13 +185,13 @@ document.addEventListener("keydown", (event) => {
     player.isJumping = true;
     player.jumpVelocity = -20; // Increased jump velocity
     player.currentImage = player.jumpImage;
-    if (soundEnabled) jumpSound.play(); // Play jump sound
+    if (audioEnabled) jumpSound.play(); // Play jump sound
   } else if (event.code === "ArrowDown" && !player.isSliding) {
     player.isSliding = true;
     player.height = 50; // Adjusted slide height
     player.y = canvas.height - 150 - player.height; // Adjusted position for slide
     player.currentImage = player.slideImage;
-    if (soundEnabled) slideSound.play(); // Play slide sound
+    if (audioEnabled) slideSound.play(); // Play slide sound
   }
 });
 
@@ -158,27 +202,29 @@ document.addEventListener("keyup", (event) => {
     player.y = canvas.height - 150 - player.height; // Reset position to ground
     player.currentImage = player.runImage;
   }
-  if (soundEnabled) slideSound.pause();
+  if (audioEnabled) slideSound.pause();
   slideSound.currentTime = 0;
 });
 
 function createCollectible() {
   let type;
+  const randomValue = Math.random();
   if (gameSpeedBoostActive) {
     // Increase cherry occurrence during energy drink powerup
-    type =
-      Math.random() < 1
-        ? "cherry"
-        : Math.random() < 0.2
-          ? "coin"
-          : "energyDrink";
+    type = randomValue < cherryProbability ? "cherry" : "coin";
   } else {
-    type =
-      Math.random() < 0.3
-        ? "cherry"
-        : Math.random() < 0.6
-          ? "coin"
-          : "energyDrink";
+    if (randomValue < cherryProbability) {
+      type = "cherry";
+    } else if (randomValue < cherryProbability + coinProbability) {
+      type = "coin";
+    } else if (
+      randomValue <
+      cherryProbability + coinProbability + energyDrinkProbability
+    ) {
+      type = "energyDrink";
+    } else {
+      type = "coinMagnet";
+    }
   }
   const y =
     Math.random() < 0.5 ? canvas.height - 150 - 60 : canvas.height - 150 - 160; // Adjusted for new player position
@@ -205,6 +251,14 @@ function createCollectible() {
   }
 
   collectibles.push(collectible);
+}
+
+// Function to control the overall spawn rate of collectibles
+function spawnCollectibles() {
+  const spawnRate = gameSpeedBoostActive ? 0.04 : 0.01; // Adjust spawn rate based on powerup state
+  if (Math.random() < spawnRate) {
+    createCollectible();
+  }
 }
 
 function startGame() {
@@ -241,7 +295,7 @@ function endGame() {
   finalScoreDisplay.textContent = score;
   gameOverScreen.style.display = "block";
   updateHighScores();
-  if (soundEnabled) deathSound.play(); // Play death sound
+  if (audioEnabled) deathSound.play(); // Play death sound
 }
 
 function updateHighScores() {
@@ -320,10 +374,10 @@ function updateGame(deltaTime) {
     ) {
       if (collectible.type === "cherry") {
         cherriesCollected++;
-        if (soundEnabled) collectSound.play(); // Play collect sound
+        if (audioEnabled) playSound(collectSound); // Play collect sound
       } else if (collectible.type === "coin") {
         coinsCollected++;
-        if (soundEnabled) collectSound.play(); // Play collect sound
+        if (audioEnabled) playSound(collectSound); // Play collect sound
       } else if (collectible.type === "energyDrink") {
         gameSpeedBoostActive = true;
         gameSpeedBoostTimer = 10000; // 10 seconds
@@ -332,13 +386,20 @@ function updateGame(deltaTime) {
         obstacleSpawnInterval /= 2;
         obstacles.forEach((obstacle) => (obstacle.speed *= 2));
         obstacles = []; // Remove all current obstacles
-        if (soundEnabled) powerupSound.play(); // Play powerup sound
+        if (audioEnabled) playSound(powerupSound); // Play powerup sound
+      } else if (collectible.type === "coinMagnet") {
+        coinMagnetActive = true;
+        coinMagnetTimer = 10000; // 10 seconds
+        if (audioEnabled) playSound(powerupSound); // Play powerup sound
       }
       collectibles.splice(index, 1);
     }
 
     // Coin magnet effect
-    if (coinMagnetActive && collectible.type === "coin") {
+    if (
+      coinMagnetActive &&
+      (collectible.type === "coin" || collectible.type === "cherry")
+    ) {
       const dx =
         player.x + player.width / 2 - collectible.x - collectible.width / 2;
       const dy =
@@ -351,10 +412,7 @@ function updateGame(deltaTime) {
     }
   });
 
-  // Spawn collectibles
-  if (Math.random() < 0.01) {
-    createCollectible();
-  }
+  spawnCollectibles();
 
   // Update obstacles
   obstacles.forEach((obstacle, index) => {
@@ -424,18 +482,40 @@ function updateGame(deltaTime) {
   }
 }
 
+// Function to play sound with reset
+function playSound(sound) {
+  sound.pause();
+  sound.currentTime = 0;
+  sound.play();
+}
+
+// Offscreen canvas for static elements
+const offscreenCanvas = document.createElement("canvas");
+const offscreenCtx = offscreenCanvas.getContext("2d");
+offscreenCanvas.width = canvas.width;
+offscreenCanvas.height = canvas.height;
+
+// Pre-render static elements
+function preRenderStaticElements() {
+  offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+  // Draw ground
+  offscreenCtx.strokeStyle = groundColorToggle ? groundColor : groundColorAlt;
+  offscreenCtx.lineWidth = 3;
+  offscreenCtx.beginPath();
+  offscreenCtx.moveTo(0, canvas.height - 150); // Adjusted ground position
+  offscreenCtx.lineTo(canvas.width, canvas.height - 150);
+  offscreenCtx.stroke();
+}
+
+// Call this function once to pre-render static elements
+preRenderStaticElements();
+
 function drawGame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw ground
-  ctx.strokeStyle = groundColorToggle ? groundColor : groundColorAlt;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(0, canvas.height - 150); // Adjusted ground position
-  ctx.lineTo(canvas.width, canvas.height - 150);
-  ctx.stroke();
-
-  groundColorToggle = !groundColorToggle;
+  // Draw pre-rendered static elements
+  ctx.drawImage(offscreenCanvas, 0, 0);
 
   // Draw player
   ctx.drawImage(
@@ -459,8 +539,10 @@ function drawGame() {
       image = cherryImage;
     } else if (collectible.type === "coin") {
       image = coinImage;
-    } else {
+    } else if (collectible.type === "energyDrink") {
       image = energyDrinkImage;
+    } else if (collectible.type === "coinMagnet") {
+      image = coinMagnetImage;
     }
     ctx.drawImage(
       image,
@@ -514,3 +596,8 @@ if (window.innerWidth < 768) {
 } else {
   welcomeScreen.style.display = "block";
 }
+
+// Disable right click
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});

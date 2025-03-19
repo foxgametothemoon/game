@@ -172,9 +172,11 @@ html {
   height: 120px;
   margin: 0 auto 1.5rem;
   background-color: var(--neon-purple);
-  /* Add your dino logo mask or image here */
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM144.5 360.7l-71-71 71-71c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0L39.5 256l71.1 71.1c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9zM224 33.9l71-71-71-71c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L473.5 256l-71.1 71.1c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9z'/%3E%3C/svg%3E") center/contain no-repeat;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM144.5 360.7l-71-71 71-71c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0L39.5 256l71.1 71.1c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9zM224 33.9l71-71-71-71c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L473.5 256l-71.1 71.1c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9z'/%3E%3C/svg%3E") center/contain no-repeat;
+  background-image: url("assets/images/fox_logo.png");
+  /* Set the image */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   box-shadow: 0 0 20px var(--neon-purple);
   border-radius: 50%;
 }
