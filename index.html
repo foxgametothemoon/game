@@ -1,154 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Neon Forest Runner - FOX GAME P2E</title>
-    <link rel="stylesheet" href="styles.css" />
-    <meta
-      name="description"
-      content="A 2D neon-themed endless runner game with P2E (Play-to-Earn) FOX GAME cryptocurrency integration"
-    />
-  </head>
-  <body>
-    <div class="game-container">
-      <!-- Game Canvas -->
-      <canvas id="gameCanvas"></canvas>
 
-      <!-- Loading Screen -->
-      <div id="loadingScreen" class="overlay">
-        <div class="loading-content">
-          <h1>NEON FOREST RUNNER</h1>
-          <div class="loading-spinner"></div>
-          <p>Loading Game Assets...</p>
-        </div>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dino Game</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-      <!-- Start Screen -->
-      <div id="startScreen" class="overlay hidden">
-        <div class="start-content">
-          <h1>NEON FOREST RUNNER</h1>
-          <div class="fox-logo pulse"></div>
-          <p>Run through the neon forest, collect FOX coins and cherries!</p>
+<body>
+  <div class="game-container">
+    <div id="backgroundLayer3" class="background-layer layer3"></div>
+    <div id="backgroundLayer2" class="background-layer layer2"></div>
+    <div id="backgroundLayer1" class="background-layer layer1"></div>
 
-          <div class="controls-info">
-            <div class="control">
-              <div class="key">SPACE / TAP</div>
-              <div class="action">Jump</div>
-            </div>
-            <div class="control">
-              <div class="key">DOWN / SWIPE DOWN</div>
-              <div class="action">Slide</div>
-            </div>
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="welcomeScreen" class="modal">
+      <div class="start-content">
+        <h1>NEON DINO RUNNER</h1>
+        <div class="dino-logo pulse"></div>
+        <p>Run through the neon landscape, collect coins and power-ups!</p>
+
+        <div class="controls-info">
+          <div class="control">
+            <div class="key">SPACE</div>
+            <div class="action">Jump</div>
           </div>
-
-          <button id="startButton" class="neon-button">START GAME</button>
-          <button id="connectWalletButton" class="neon-button wallet-button">
-            CONNECT WALLET
-          </button>
-        </div>
-      </div>
-
-      <!-- Game Over Screen -->
-      <div id="gameOverScreen" class="overlay hidden">
-        <div class="gameover-content">
-          <h2>GAME OVER</h2>
-          <div class="stats">
-            <div class="stat">
-              <span class="label">DISTANCE</span>
-              <span id="finalDistance" class="value">0m</span>
-            </div>
-            <div class="stat">
-              <span class="label">CHERRIES</span>
-              <span id="finalCherries" class="value">0</span>
-            </div>
-            <div class="stat">
-              <span class="label">FOX COINS</span>
-              <span id="finalCoins" class="value">0</span>
-            </div>
-          </div>
-
-          <div id="walletReward" class="wallet-reward hidden">
-            <p>FOX coins sent to your wallet!</p>
-          </div>
-
-          <button id="restartButton" class="neon-button">PLAY AGAIN</button>
-          <button id="leaderboardButton" class="neon-button">
-            LEADERBOARD
-          </button>
-        </div>
-      </div>
-
-      <!-- Game UI Overlay -->
-      <div id="gameUI" class="game-ui hidden">
-        <div class="stats-panel">
-          <div class="stat">
-            <div class="icon distance-icon"></div>
-            <span id="distanceCounter">0m</span>
-          </div>
-          <div class="stat">
-            <div class="icon cherry-icon"></div>
-            <span id="cherryCounter">0</span>
-          </div>
-          <div class="stat">
-            <div class="icon coin-icon"></div>
-            <span id="coinCounter">0</span>
+          <div class="control">
+            <div class="key">DOWN</div>
+            <div class="action">Slide</div>
           </div>
         </div>
 
-        <div id="powerUpIndicator" class="power-up-indicator hidden">
-          <div class="power-up-icon"></div>
-          <div class="power-up-timer"></div>
-        </div>
-
-        <div id="walletStatus" class="wallet-status">
-          <div class="wallet-icon"></div>
-          <span id="walletAddress">Not Connected</span>
-        </div>
-      </div>
-
-      <!-- Pause Button (Mobile) -->
-      <button id="pauseButton" class="pause-button hidden">II</button>
-
-      <!-- Pause Menu -->
-      <div id="pauseMenu" class="overlay hidden">
-        <div class="pause-content">
-          <h2>PAUSED</h2>
-          <button id="resumeButton" class="neon-button">RESUME</button>
-          <button id="quitButton" class="neon-button">QUIT GAME</button>
-        </div>
+        <button id="startGameButton" class="neon-button">START GAME</button>
       </div>
     </div>
 
-    <!-- Leaderboard Panel -->
-    <div id="leaderboardPanel" class="overlay hidden">
-      <div class="leaderboard-content">
-        <h2>LEADERBOARD</h2>
-        <div class="leaderboard-tabs">
-          <button class="tab-button active" data-tab="distance">
-            DISTANCE
-          </button>
-          <button class="tab-button" data-tab="cherries">CHERRIES</button>
-          <button class="tab-button" data-tab="coins">FOX COINS</button>
-        </div>
-        <div class="leaderboard-table">
-          <div id="leaderboardList">
-            <!-- Leaderboard entries will be populated here -->
-          </div>
-        </div>
-        <button id="closeLeaderboardButton" class="neon-button">CLOSE</button>
+    <div id="gameOverScreen" class="modal" style="display: none">
+      <h1>Game Over!</h1>
+      <p>Your Score: <span id="finalScore">0</span></p>
+      <button id="restartButton" class="neon-button">Restart</button>
+      <button id="leaderboardButton" class="neon-button">Leaderboard</button>
+    </div>
+
+    <div id="leaderboardScreen" class="modal" style="display: none">
+      <h1>Leaderboard</h1>
+      <ol id="highScoresList"></ol>
+      <button id="closeLeaderboard" class="neon-button">Close</button>
+    </div>
+
+    <div id="mobileViewScreen" class="modal" style="display: none">
+      <h1>Mobile View</h1>
+      <p>Please open the game on a PC for the best experience.</p>
+    </div>
+
+    <div class="stats-panel">
+      <div class="stat">
+        <div class="icon distance-icon"></div>
+        <span id="distanceCounter">0m</span>
+      </div>
+      <div class="stat">
+        <div class="icon cherry-icon"></div>
+        <span id="cherryCounter">0</span>
+      </div>
+      <div class="stat">
+        <div class="icon coin-icon"></div>
+        <span id="coinCounter">0</span>
       </div>
     </div>
 
-    <!-- Audio Toggle -->
+    <div id="powerupWidget" class="game-element">
+      Powerup:
+      <div id="powerupBar"></div>
+    </div>
     <button id="audioToggle" class="audio-toggle">
-      <div class="audio-icon"></div>
+      <div id="audioIcon" class="audio-icon"></div>
     </button>
+  </div>
 
-    <!-- Scripts -->
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
+
 </html>

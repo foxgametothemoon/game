@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <!-- Night Sky Background with Blue-White Moon -->
+  
+  <!-- Deep space gradient -->
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#050518;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#0a0a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#101036;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Night sky backdrop -->
+  <rect width="1600" height="900" fill="url(#skyGradient)" />
+  
+  <!-- Stars -->
+  <g id="stars">
+    <!-- Small stars -->
+    <g fill="#ffffff">
+      <circle cx="120" cy="80" r="1" opacity="0.6" />
+      <circle cx="340" cy="150" r="1" opacity="0.7" />
+      <circle cx="560" cy="90" r="1" opacity="0.5" />
+      <circle cx="780" cy="170" r="1" opacity="0.8" />
+      <circle cx="920" cy="120" r="1" opacity="0.6" />
+      <circle cx="1100" cy="70" r="1" opacity="0.7" />
+      <circle cx="1300" cy="140" r="1" opacity="0.6" />
+      <circle cx="1480" cy="60" r="1" opacity="0.8" />
+      <circle cx="220" cy="190" r="1" opacity="0.5" />
+      <circle cx="400" cy="240" r="1" opacity="0.7" />
+      <circle cx="640" cy="180" r="1" opacity="0.6" />
+      <circle cx="820" cy="220" r="1" opacity="0.5" />
+      <circle cx="1020" cy="250" r="1" opacity="0.8" />
+      <circle cx="1200" cy="190" r="1" opacity="0.6" />
+      <circle cx="1380" cy="230" r="1" opacity="0.7" />
+      <circle cx="1520" cy="210" r="1" opacity="0.5" />
+      <circle cx="180" cy="320" r="1" opacity="0.7" />
+      <circle cx="380" cy="290" r="1" opacity="0.6" />
+      <circle cx="600" cy="310" r="1" opacity="0.8" />
+      <circle cx="800" cy="280" r="1" opacity="0.5" />
+      <circle cx="1040" cy="330" r="1" opacity="0.7" />
+      <circle cx="1220" cy="300" r="1" opacity="0.6" />
+      <circle cx="1440" cy="320" r="1" opacity="0.8" />
+      <circle cx="1550" cy="280" r="1" opacity="0.5" />
+    </g>
+    
+    <!-- Medium stars -->
+    <g fill="#ffffff">
+      <circle cx="200" cy="100" r="1.5" opacity="0.8" />
+      <circle cx="480" cy="120" r="1.5" opacity="0.7" />
+      <circle cx="700" cy="80" r="1.5" opacity="0.9" />
+      <circle cx="950" cy="150" r="1.5" opacity="0.7" />
+      <circle cx="1150" cy="110" r="1.5" opacity="0.8" />
+      <circle cx="1380" cy="90" r="1.5" opacity="0.9" />
+      <circle cx="290" cy="220" r="1.5" opacity="0.8" />
+      <circle cx="520" cy="200" r="1.5" opacity="0.7" />
+      <circle cx="730" cy="250" r="1.5" opacity="0.9" />
+      <circle cx="980" cy="190" r="1.5" opacity="0.7" />
+      <circle cx="1250" cy="230" r="1.5" opacity="0.8" />
+      <circle cx="1460" cy="180" r="1.5" opacity="0.9" />
+    </g>
+    
+    <!-- Larger bright stars -->
+    <g fill="#ffffff">
+      <circle cx="150" cy="150" r="2" opacity="0.9" />
+      <circle cx="420" cy="80" r="2" opacity="1.0" />
+      <circle cx="630" cy="140" r="2" opacity="0.9" />
+      <circle cx="880" cy="70" r="2" opacity="1.0" />
+      <circle cx="1080" cy="160" r="2" opacity="0.9" />
+      <circle cx="1350" cy="100" r="2" opacity="1.0" />
+      <circle cx="1520" cy="130" r="2" opacity="0.9" />
+    </g>
+    
+    
+  </g>
+  
+  <!-- Distant nebula glow -->
+  <circle cx="300" cy="400" r="200" fill="#0033cc" opacity="0.05" />
+  <circle cx="1300" cy="300" r="180" fill="#330066" opacity="0.05" />
+  
+  <!-- Moon with blue-white theme -->
+  <defs>
+    <radialGradient id="moonGradient" cx="50%" cy="50%" r="50%" fx="40%" fy="40%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#e6f0ff;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#b3d1ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#80b3ff;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Moon -->
+  <circle cx="1100" cy="200" r="80" fill="url(#moonGradient)" />
+  
+  <!-- Moon craters -->
+  <circle cx="1070" cy="170" r="15" fill="#d9e6ff" opacity="0.6" />
+  <circle cx="1130" cy="220" r="12" fill="#d9e6ff" opacity="0.5" />
+  <circle cx="1090" cy="240" r="10" fill="#d9e6ff" opacity="0.4" />
+  <circle cx="1115" cy="175" r="8" fill="#d9e6ff" opacity="0.5" />
+  
+  <!-- Moon glow -->
+  <circle cx="1100" cy="200" r="100" fill="#4d79ff" opacity="0.1" />
+  <circle cx="1100" cy="200" r="130" fill="#4d79ff" opacity="0.05" />
+  
+  
+  
+  <!-- Subtle aurora effect -->
+  <path d="M0,450 Q400,400 800,450 Q1200,500 1600,450 L1600,900 L0,900 Z" 
+        fill="#000033" opacity="0.1" />
+  <path d="M0,500 Q400,450 800,500 Q1200,550 1600,500 L1600,900 L0,900 Z" 
+        fill="#000066" opacity="0.05" />
+  
+  <!-- Distant city lights glow on horizon -->
+  <rect x="0" y="550" width="1600" height="50" fill="#001a33" opacity="0.1" />
+</svg>
