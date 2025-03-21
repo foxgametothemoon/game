@@ -17,6 +17,9 @@ const leaderboardScreen = document.getElementById("leaderboardScreen");
 const mobileViewScreen = document.getElementById("mobileViewScreen");
 
 const startGameButton = document.getElementById("startGameButton");
+const connectWalletButton = document.getElementById("connectWalletButton");
+const walletStat = document.getElementById("walletStat");
+const walletAddressDisplay = document.getElementById("walletAddressDisplay");
 const restartButton = document.getElementById("restartButton");
 const leaderboardButton = document.getElementById("leaderboardButton");
 const closeLeaderboard = document.getElementById("closeLeaderboard");
@@ -34,6 +37,92 @@ const cherryProbability = 0.6; // 60% chance
 const coinProbability = 0.2; // 20% chance
 const energyDrinkProbability = 0.1; // 10% chance
 const coinMagnetProbability = 0.1; // 10% chance
+
+// connect wallet to game
+async function connectWallet() {
+  if (window.solana && window.solana.isPhantom) {
+    try {
+      const response = await window.solana.connect();
+      userPublicKey = response.publicKey.toString();
+      console.log(userPublicKey);
+      walletStat.style.display = "flex";
+      walletAddressDisplay.textContent =
+        userPublicKey.slice(0, 5) + "..." + userPublicKey.slice(-5);
+      walletAddressDisplay.title = userPublicKey;
+    } catch (error) {
+      console.error("Connection failed", error);
+    }
+  } else {
+    alert(
+      "Phantom Wallet not found. Please install it from https://phantom.app/"
+    );
+  }
+}
+let userPublicKey = null;
+connectWalletButton.addEventListener("click", connectWallet);
+
+// Function to upload scores to backend API
+async function uploadScores(scores) {
+  const apiUrl = "https://foxgame.pythonanywhere.com/api/scores"; // Replace with your actual API URL
+
+  if (!userPublicKey) {
+    alert("Please connect your wallet before uploading scores.");
+    return; // Exit the function if wallet is not connected
+  }
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(scores),
+    });
+
+    if (response.ok) {
+      console.log("Scores uploaded successfully!");
+      // Optionally, clear the local storage
+      localStorage.removeItem("pendingScores");
+    } else {
+      console.error("Failed to upload scores:", response.status);
+      alert("Failed to upload scores. Please try again later.");
+    }
+  } catch (error) {
+    console.error("Error uploading scores:", error);
+    alert("An error occurred while uploading scores. Please try again later.");
+  }
+}
+
+// Function to handle beforeunload event
+function handleBeforeUnload(event) {
+  const pendingScores = JSON.parse(localStorage.getItem("pendingScores")) || [];
+
+  if (pendingScores.length > 0) {
+    event.preventDefault(); // Standard for most browsers
+    event.returnValue =
+      "You have unsaved scores. Do you want to upload them before leaving?"; // Chrome requires returnValue
+
+    // Upload scores asynchronously
+    uploadScores(pendingScores);
+  }
+}
+
+// Example score saving (you'll need to adapt this to your game logic)
+function saveScore(score, cherriesCollected, coinsCollected) {
+  const scoreData = {
+    publicKey: userPublicKey, // Use the stored public key
+    score: score,
+    cherriesCollected: cherriesCollected,
+    coinsCollected: coinsCollected,
+    timestamp: Date.now(),
+  };
+
+  let pendingScores = JSON.parse(localStorage.getItem("pendingScores")) || [];
+  pendingScores.push(scoreData);
+  localStorage.setItem("pendingScores", JSON.stringify(pendingScores));
+}
+
+window.addEventListener("beforeunload", handleBeforeUnload);
 
 // Function to get the current audio state from localStorage
 function getAudioState() {
@@ -295,6 +384,7 @@ function endGame() {
   finalScoreDisplay.textContent = score;
   gameOverScreen.style.display = "block";
   updateHighScores();
+  saveScore(score, cherriesCollected, coinsCollected); // Save the score, cherries, and coins
   if (audioEnabled) deathSound.play(); // Play death sound
 }
 
@@ -337,11 +427,10 @@ function createObstacle() {
 
 function updateGame(deltaTime) {
   distance += deltaTime / 1000;
+  score = Math.floor(distance); // Update score based on distance
 
   // Update stats panel
-  document.getElementById("distanceCounter").textContent = `${Math.floor(
-    distance
-  )}m`;
+  document.getElementById("distanceCounter").textContent = `${score}m`;
   document.getElementById("cherryCounter").textContent = cherriesCollected;
   document.getElementById("coinCounter").textContent = coinsCollected;
 
@@ -403,7 +492,7 @@ function updateGame(deltaTime) {
       const dx =
         player.x + player.width / 2 - collectible.x - collectible.width / 2;
       const dy =
-        player.y + player.height / 2 - collectible.y - collectible.height / 2;
+        player.y + player.height / 2 - collectible.y + collectible.height / 2;
       const distance = Math.sqrt(dx * dx + dy * dy);
       if (distance < 200) {
         collectible.x += (dx / distance) * 5;

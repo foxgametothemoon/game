@@ -244,6 +244,18 @@ html {
   margin: 5px;
 }
 
+#connectWalletButton {
+  background-color: var(--neon-green);
+  color: var(--darker-bg);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: var(--button-glow);
+  font-family: "Orbitron", sans-serif;
+  margin: 5px;
+}
+
 #leaderboardScreen ol {
   list-style-type: decimal;
   padding-left: 20px;
@@ -408,4 +420,29 @@ html {
   height: 10px;
   background-color: rgba(255, 255, 255, 0.3);
   border: 1px solid var(--neon-blue);
+}
+
+.wallet-icon {
+  width: 25px;
+  height: 25px;
+  background-image: url("data:image/svg+xml,%3Csvg fill='%2300f3ff' version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 969.486 969.486' xml:space='preserve' stroke='%2300f3ff'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E %3Cg%3E %3Cg%3E %3Cpath d='M806.582,235.309L766.137,87.125l-137.434,37.51L571.451,9.072L114.798,235.309H0v725.105h907.137V764.973h62.35v-337.53 h-62.352V235.309H806.582z M718.441,170.63l17.654,64.68h-52.561h-75.887h-126.19l111.159-30.339l66.848-18.245L718.441,170.63z M839.135,892.414H68V522.062v-129.13v-10.233v-69.787v-9.602h35.181h27.538h101.592h409.025h75.889h37.43h35.242h35.244h13.994 v51.272v72.86h-15.357h-35.244h-87.85H547.508h-55.217v27.356v75.888v8.758v35.244v35.244v155.039h346.846v127.441H839.135z M901.486,696.973h-28.352h-34H560.291V591.375v-35.244v-35.244v-23.889v-1.555h3.139h90.086h129.129h56.492h34h4.445h23.904 V696.973z M540.707,100.191l21.15,42.688l-238.955,65.2018L540.707,100.191z'%3E%3C/path%3E %3Cpolygon points='614.146,564.57 614.146,576.676 614.146,631.152 680.73,631.152 680.73,564.57 658.498,564.57 '%3E%3C/polygon%3E %3C/g%3E %3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.wallet-address {
+  font-size: 0.9rem;
+  color: #cccccc;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.wallet-address:hover {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  max-width: none;
 }

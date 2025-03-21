@@ -35,6 +35,7 @@
         </div>
 
         <button id="startGameButton" class="neon-button">START GAME</button>
+        <button id="connectWalletButton">CONNECT WALLET</button>
       </div>
     </div>
 
@@ -69,6 +70,10 @@
         <div class="icon coin-icon"></div>
         <span id="coinCounter">0</span>
       </div>
+      <div class="stat" id="walletStat" style="display: none">
+        <div class="icon wallet-icon"></div>
+        <span class="wallet-address" id="walletAddressDisplay"></span>
+      </div>
     </div>
 
     <div id="powerupWidget" class="game-element">
@@ -80,7 +85,7 @@
     </button>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js" type="module"></script>
 </body>
 
 </html>
