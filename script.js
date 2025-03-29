@@ -16,6 +16,7 @@ const API_BASE_URL = "https://foxgame.pythonanywhere.com/api"; // Or your actual
 const CHECK_USER_ENDPOINT = `${API_BASE_URL}/check-user/`; // e.g., /api/check-user/<publicKey>
 const SIGNUP_ENDPOINT = `${API_BASE_URL}/signup`; // e.g., /api/signup (POST request)
 const SCORE_UPLOAD_ENDPOINT = `${API_BASE_URL}/scores`; // Existing score upload endpoint
+const TOP_SCORE_ENDPOINT = `${API_BASE_URL}/top-scores`; //for top scores
 
 const welcomeScreen = document.getElementById("welcomeScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
@@ -24,13 +25,16 @@ const mobileViewScreen = document.getElementById("mobileViewScreen");
 
 const startGameButton = document.getElementById("startGameButton");
 const connectWalletButton = document.getElementById("connectWalletButton");
+const connectWalletButtonGameOver = document.getElementById(
+  "connectWalletButtonGameOver"
+);
 const walletStat = document.getElementById("walletStat");
 const walletAddressDisplay = document.getElementById("walletAddressDisplay");
 const restartButton = document.getElementById("restartButton");
 const leaderboardButton = document.getElementById("leaderboardButton");
 const closeLeaderboard = document.getElementById("closeLeaderboard");
 const finalScoreDisplay = document.getElementById("finalScore");
-const highScoresList = document.getElementById("highScoresList");
+const leaderboardTableBody = document.getElementById("leaderboardTableBody");
 const currentScoreDisplay = document.getElementById("currentScore");
 const powerupBar = document.getElementById("powerupBar");
 const audioToggle = document.getElementById("audioToggle");
@@ -228,6 +232,58 @@ function updateWalletDisplay(publicKey, username = null) {
     }`; // Add username to title tooltip
 }
 
+// Function to fetch and display leaderboard data
+async function displayLeaderboard() {
+  const apiUrl = TOP_SCORE_ENDPOINT;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const leaderboardData = await response.json();
+      leaderboardTableBody.innerHTML = ""; // Clear existing table body
+
+      leaderboardData.forEach((entry, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.username}</td>
+                    <td>${entry.score}</td>
+                    <td>${entry.cherriesCollected}</td>
+                    <td>${entry.coinsCollected}</td>
+                `;
+        leaderboardTableBody.appendChild(row);
+      });
+    } else {
+      console.error(
+        "Failed to fetch leaderboard:",
+        response.status,
+        await response.text()
+      );
+      alert("Failed to fetch leaderboard.");
+    }
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+    alert("An error occurred while fetching leaderboard.");
+  }
+}
+
+// Function to show leaderboard screen
+function showLeaderboard() {
+  leaderboardScreen.style.display = "block";
+  if (userPublicKey) {
+    userProfileButtonLeaderboard.style.display = "block";
+  } else {
+    userProfileButtonLeaderboard.style.display = "none";
+  }
+  displayLeaderboard(); // Fetch and display leaderboard data
+}
+
 submitUsernameButton.addEventListener("click", async () => {
   const enteredUsername = usernameInput.value.trim();
 
@@ -272,6 +328,7 @@ submitUsernameButton.addEventListener("click", async () => {
 
 let userPublicKey = null;
 connectWalletButton.addEventListener("click", connectWallet);
+connectWalletButtonGameOver.addEventListener("click", connectWallet);
 
 // Event listeners for the new buttons
 userProfileButtonGameOver.addEventListener("click", () => {
@@ -489,7 +546,7 @@ restartButton.addEventListener("click", () => {
 leaderboardButton.addEventListener("click", () => {
   gameOverScreen.style.display = "none";
   leaderboardScreen.style.display = "block";
-  displayHighScores();
+  showLeaderboard();
 });
 
 closeLeaderboard.addEventListener("click", () => {
@@ -638,25 +695,14 @@ function endGame() {
   gameRunning = false;
   finalScoreDisplay.textContent = score;
   gameOverScreen.style.display = "block";
-  updateHighScores();
+  if (!userPublicKey) {
+    connectWalletButtonGameOver.style.display = "block";
+  } else {
+    connectWalletButtonGameOver.style.display = "none";
+  }
+  //updateHighScores();
   saveScore(score, cherriesCollected, coinsCollected); // Save the score, cherries, and coins
   if (audioEnabled) deathSound.play(); // Play death sound
-}
-
-function updateHighScores() {
-  highScores.push(score);
-  highScores.sort((a, b) => b - a);
-  highScores = highScores.slice(0, 5); // Keep top 5 scores
-  localStorage.setItem("highScores", JSON.stringify(highScores));
-}
-
-function displayHighScores() {
-  highScoresList.innerHTML = "";
-  highScores.forEach((score, index) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${score}`;
-    highScoresList.appendChild(listItem);
-  });
 }
 
 function createObstacle() {
@@ -941,7 +987,7 @@ if (window.innerWidth < 768) {
   welcomeScreen.style.display = "block";
 }
 
-// // Disable right click
-// document.addEventListener("contextmenu", (e) => {
-//   e.preventDefault();
-// });
+// Disable right click
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});

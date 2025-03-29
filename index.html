@@ -1,95 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Forest Runner</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="shortcut icon"
+      href="assets/images/fox_logo.png"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div class="game-container">
+      <div id="backgroundLayer3" class="background-layer layer3"></div>
+      <div id="backgroundLayer2" class="background-layer layer2"></div>
+      <div id="backgroundLayer1" class="background-layer layer1"></div>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neon Forest Runner</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="shortcut icon" href="assets/images/fox_logo.png" type="image/x-icon" />
-</head>
+      <canvas id="gameCanvas"></canvas>
 
-<body>
-  <div class="game-container">
-    <div id="backgroundLayer3" class="background-layer layer3"></div>
-    <div id="backgroundLayer2" class="background-layer layer2"></div>
-    <div id="backgroundLayer1" class="background-layer layer1"></div>
+      <div id="welcomeScreen" class="modal">
+        <div class="start-content">
+          <h1>NEON DINO RUNNER</h1>
+          <div class="dino-logo pulse"></div>
+          <p>Run through the neon landscape, collect coins and power-ups!</p>
 
-    <canvas id="gameCanvas"></canvas>
-
-    <div id="welcomeScreen" class="modal">
-      <div class="start-content">
-        <h1>NEON DINO RUNNER</h1>
-        <div class="dino-logo pulse"></div>
-        <p>Run through the neon landscape, collect coins and power-ups!</p>
-
-        <div class="controls-info">
-          <div class="control">
-            <div class="key">SPACE</div>
-            <div class="action">Jump</div>
+          <div class="controls-info">
+            <div class="control">
+              <div class="key">SPACE</div>
+              <div class="action">Jump</div>
+            </div>
+            <div class="control">
+              <div class="key">DOWN</div>
+              <div class="action">Slide</div>
+            </div>
           </div>
-          <div class="control">
-            <div class="key">DOWN</div>
-            <div class="action">Slide</div>
-          </div>
+
+          <button id="startGameButton" class="neon-button">START GAME</button>
+          <button id="connectWalletButton">CONNECT WALLET</button>
         </div>
-
-        <button id="startGameButton" class="neon-button">START GAME</button>
-        <button id="connectWalletButton">CONNECT WALLET</button>
       </div>
-    </div>
 
-    <div id="gameOverScreen" class="modal" style="display: none">
-      <h1>Game Over!</h1>
-      <p>Your Score: <span id="finalScore">0</span></p>
-      <div class="button-row">
-        <button id="restartButton" class="neon-button">Restart</button>
-        <button id="leaderboardButton" class="neon-button">
-          Leaderboard
-        </button>
-        <button id="userProfileButtonGameOver" class="neon-button user-profile-button" style="display: none">
-          User Profile
-        </button>
+      <div id="gameOverScreen" class="modal" style="display: none">
+        <h1>Game Over!</h1>
+        <p>Your Score: <span id="finalScore">0</span></p>
+        <div class="button-row">
+          <button id="restartButton" class="neon-button">Restart</button>
+          <button id="leaderboardButton" class="neon-button">
+            Leaderboard
+          </button>
+          <button
+            id="userProfileButtonGameOver"
+            class="neon-button user-profile-button"
+            style="display: none"
+          >
+            User Profile
+          </button>
+          <button id="connectWalletButtonGameOver" style="display: none">
+            CONNECT WALLET
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div id="leaderboardScreen" class="modal" style="display: none">
-      <h1>Leaderboard</h1>
-      <ol id="highScoresList"></ol>
-      <div class="button-row">
-        <button id="closeLeaderboard" class="neon-button">Close</button>
-        <button id="userProfileButtonLeaderboard" class="neon-button user-profile-button" style="display: none">
-          User Profile
-        </button>
+      <div id="leaderboardScreen" class="modal" style="display: none">
+        <h1>Leaderboard</h1>
+        <div class="leaderboard-table-container">
+          <table id="leaderboardTable">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Score</th>
+                <th>Cherries</th>
+                <th>Coins</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardTableBody"></tbody>
+          </table>
+        </div>
+        <div class="button-row">
+          <button id="closeLeaderboard" class="neon-button">Close</button>
+          <button
+            id="userProfileButtonLeaderboard"
+            class="neon-button user-profile-button"
+            style="display: none"
+          >
+            User Profile
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div id="userProfileModal" class="modal" style="display: none">
-      <h1>User Profile</h1>
+      <div id="userProfileModal" class="modal" style="display: none">
+        <h1>User Profile</h1>
 
-      <p>
-        <span class="icon username-icon"></span>
-        Username: <span class="profile-username">null</span>
-      </p>
-      <p>
-        <span class="icon distance-icon"></span>
-        Score: <span class="profile-score">0</span>
-      </p>
-      <p>
-        <span class="icon cherry-icon"></span>
-        Cherries Collected: <span class="profile-cherries">0</span>
-      </p>
-      <p>
-        <span class="icon coin-icon"></span>
-        Coins Collected: <span class="profile-coins">0</span>
-      </p>
-      <button id="closeProfileModal" class="neon-button">Close</button>
-    </div>
+        <p>
+          <span class="icon username-icon"></span>
+          Username: <span class="profile-username">null</span>
+        </p>
+        <p>
+          <span class="icon distance-icon"></span>
+          Score: <span class="profile-score">0</span>
+        </p>
+        <p>
+          <span class="icon cherry-icon"></span>
+          Cherries Collected: <span class="profile-cherries">0</span>
+        </p>
+        <p>
+          <span class="icon coin-icon"></span>
+          Coins Collected: <span class="profile-coins">0</span>
+        </p>
+        <button id="closeProfileModal" class="neon-button">Close</button>
+      </div>
 
-    <div id="usernamePromptModal" class="modal" style="display: none">
-      <h1>Welcome!</h1>
-      <p>Please enter a username to associate with your wallet.</p>
-      <input type="text" id="usernameInput" placeholder="Enter Username" style="
+      <div id="usernamePromptModal" class="modal" style="display: none">
+        <h1>Welcome!</h1>
+        <p>Please enter a username to associate with your wallet.</p>
+        <input
+          type="text"
+          id="usernameInput"
+          placeholder="Enter Username"
+          style="
             padding: 10px;
             margin-bottom: 1rem;
             width: 80%;
@@ -97,47 +127,50 @@
             border: 1px solid var(--neon-blue);
             background: var(--darker-bg);
             color: white;
-          " />
-      <button id="submitUsernameButton" class="neon-button">
-        Save Username
+          "
+        />
+        <button id="submitUsernameButton" class="neon-button">
+          Save Username
+        </button>
+        <p
+          id="usernameError"
+          style="color: var(--neon-pink); display: none; margin-top: 0.5rem"
+        ></p>
+      </div>
+
+      <div id="mobileViewScreen" class="modal" style="display: none">
+        <h1>Mobile View</h1>
+        <p>Please open the game on a PC for the best experience.</p>
+      </div>
+
+      <div class="stats-panel">
+        <div class="stat">
+          <div class="icon distance-icon"></div>
+          <span id="distanceCounter">0m</span>
+        </div>
+        <div class="stat">
+          <div class="icon cherry-icon"></div>
+          <span id="cherryCounter">0</span>
+        </div>
+        <div class="stat">
+          <div class="icon coin-icon"></div>
+          <span id="coinCounter">0</span>
+        </div>
+        <div class="stat" id="walletStat" style="display: none">
+          <div class="icon wallet-icon"></div>
+          <span class="wallet-address" id="walletAddressDisplay"></span>
+        </div>
+      </div>
+
+      <div id="powerupWidget" class="game-element">
+        Powerup:
+        <div id="powerupBar"></div>
+      </div>
+      <button id="audioToggle" class="audio-toggle">
+        <div id="audioIcon" class="audio-icon"></div>
       </button>
-      <p id="usernameError" style="color: var(--neon-pink); display: none; margin-top: 0.5rem"></p>
     </div>
 
-    <div id="mobileViewScreen" class="modal" style="display: none">
-      <h1>Mobile View</h1>
-      <p>Please open the game on a PC for the best experience.</p>
-    </div>
-
-    <div class="stats-panel">
-      <div class="stat">
-        <div class="icon distance-icon"></div>
-        <span id="distanceCounter">0m</span>
-      </div>
-      <div class="stat">
-        <div class="icon cherry-icon"></div>
-        <span id="cherryCounter">0</span>
-      </div>
-      <div class="stat">
-        <div class="icon coin-icon"></div>
-        <span id="coinCounter">0</span>
-      </div>
-      <div class="stat" id="walletStat" style="display: none">
-        <div class="icon wallet-icon"></div>
-        <span class="wallet-address" id="walletAddressDisplay"></span>
-      </div>
-    </div>
-
-    <div id="powerupWidget" class="game-element">
-      Powerup:
-      <div id="powerupBar"></div>
-    </div>
-    <button id="audioToggle" class="audio-toggle">
-      <div id="audioIcon" class="audio-icon"></div>
-    </button>
-  </div>
-
-  <script src="script.js" type="module"></script>
-</body>
-
+    <script src="script.js" type="module"></script>
+  </body>
 </html>

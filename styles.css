@@ -256,6 +256,18 @@ html {
   margin: 5px;
 }
 
+#connectWalletButtonGameOver {
+  background-color: var(--neon-green);
+  color: var(--darker-bg);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: var(--button-glow);
+  font-family: "Orbitron", sans-serif;
+  margin: 5px;
+}
+
 #leaderboardScreen ol {
   list-style-type: decimal;
   padding-left: 20px;
@@ -491,4 +503,57 @@ html {
   /* Add some space between buttons */
   margin-top: 20px;
   /* Add some space between score and buttons */
+}
+
+.leaderboard-table-container {
+  overflow-x: auto;
+  /* Enable horizontal scrolling if needed */
+  margin-top: 20px;
+}
+
+#leaderboardTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+}
+
+#leaderboardTable th,
+#leaderboardTable td {
+  border: 1px solid var(--neon-blue);
+  padding: 8px;
+  text-align: left;
+}
+
+#leaderboardTable th {
+  background-color: rgba(0, 243, 255, 0.1);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#leaderboardTable tr:nth-child(even) {
+  background-color: rgba(0, 243, 255, 0.05);
+}
+
+#leaderboardTable tr:hover {
+  background-color: rgba(0, 243, 255, 0.15);
+}
+
+/* Neon effect for table rows */
+#leaderboardTable tr {
+  transition: box-shadow 0.3s ease;
+}
+
+#leaderboardTable tr:hover {
+  box-shadow: 0 0 10px 2px var(--neon-blue);
+}
+
+/* Neon effect for table headers */
+#leaderboardTable th {
+  text-shadow: 0 0 5px var(--neon-blue);
+}
+
+/* Neon effect for table cells */
+#leaderboardTable td {
+  text-shadow: 0 0 3px var(--neon-blue);
 }
