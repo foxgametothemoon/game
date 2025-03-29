@@ -240,6 +240,7 @@ leaderboardButton.addEventListener("click", () => {
 
 closeLeaderboard.addEventListener("click", () => {
   leaderboardScreen.style.display = "none";
+  gameOverScreen.style.display = "block";
 });
 
 // Audio toggle event listener
@@ -399,7 +400,7 @@ function displayHighScores() {
   highScoresList.innerHTML = "";
   highScores.forEach((score, index) => {
     const listItem = document.createElement("li");
-    listItem.textContent = `${index + 1}. ${score}`;
+    listItem.textContent = `${score}`;
     highScoresList.appendChild(listItem);
   });
 }
