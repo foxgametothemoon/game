@@ -11,6 +11,12 @@ const collectSound = new Audio("assets/audio/collect.mp3");
 const powerupSound = new Audio("assets/audio/powerup.mp3");
 const slideSound = new Audio("assets/audio/slide.mp3");
 
+// --- NEW: Backend API URLs (Adjust these) ---
+const API_BASE_URL = "https://foxgame.pythonanywhere.com/api"; // Or your actual base URL
+const CHECK_USER_ENDPOINT = `${API_BASE_URL}/check-user/`; // e.g., /api/check-user/<publicKey>
+const SIGNUP_ENDPOINT = `${API_BASE_URL}/signup`; // e.g., /api/signup (POST request)
+const SCORE_UPLOAD_ENDPOINT = `${API_BASE_URL}/scores`; // Existing score upload endpoint
+
 const welcomeScreen = document.getElementById("welcomeScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const leaderboardScreen = document.getElementById("leaderboardScreen");
@@ -28,6 +34,21 @@ const highScoresList = document.getElementById("highScoresList");
 const currentScoreDisplay = document.getElementById("currentScore");
 const powerupBar = document.getElementById("powerupBar");
 const audioToggle = document.getElementById("audioToggle");
+const usernamePromptModal = document.getElementById("usernamePromptModal");
+const usernameInput = document.getElementById("usernameInput");
+const submitUsernameButton = document.getElementById("submitUsernameButton");
+const usernameError = document.getElementById("usernameError");
+const userProfileButtonGameOver = document.getElementById(
+  "userProfileButtonGameOver"
+);
+const userProfileButtonLeaderboard = document.getElementById(
+  "userProfileButtonLeaderboard"
+);
+const userProfileModal = document.getElementById("userProfileModal");
+const closeProfileModal = document.getElementById("closeProfileModal");
+
+let userExists = false; // --- NEW: Flag to track if user exists on backend ---
+let currentUsername = null; // --- NEW: Store username if exists ---
 
 let coinMagnetImage = new Image();
 coinMagnetImage.src = "assets/images/coin-magnet.svg";
@@ -49,6 +70,25 @@ async function connectWallet() {
       walletAddressDisplay.textContent =
         userPublicKey.slice(0, 5) + "..." + userPublicKey.slice(-5);
       walletAddressDisplay.title = userPublicKey;
+
+      const checkResult = await checkUserExists(userPublicKey);
+      userExists = checkResult.exists;
+      currentUsername = checkResult.username; // Store username if returned
+
+      if (userExists) {
+        console.log("User already registered. Username:", currentUsername);
+        updateWalletDisplay(userPublicKey, currentUsername); // Update UI directly
+        userProfileButtonGameOver.style.display = "block";
+        userProfileButtonLeaderboard.style.display = "block";
+      } else {
+        console.log("New user detected. Prompting for username.");
+        usernameError.style.display = "none"; // Hide any previous error
+        usernameInput.value = ""; // Clear input field
+        usernamePromptModal.style.display = "block";
+        welcomeScreen.style.display = "none"; // Hide welcome screen if it was visible
+        userProfileButtonGameOver.style.display = "none";
+        userProfileButtonLeaderboard.style.display = "none";
+      }
     } catch (error) {
       console.error("Connection failed", error);
     }
@@ -58,17 +98,214 @@ async function connectWallet() {
     );
   }
 }
+
+// Function to fetch and display user profile data
+async function displayUserProfile(publicKey) {
+  const apiUrl = `${API_BASE_URL}/scores/${publicKey}`; // Construct the API URL
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    if (response.ok) {
+      const userData = await response.json();
+
+      userProfileModal.querySelector(".profile-username").textContent =
+        userData.username;
+
+      userProfileModal.querySelector(".profile-cherries").textContent =
+        userData.cherriesCollected;
+      userProfileModal.querySelector(".profile-coins").textContent =
+        userData.coinsCollected;
+      userProfileModal.querySelector(".profile-score").textContent =
+        userData.score;
+
+      userProfileModal.style.display = "block";
+    } else {
+      console.error(
+        "Failed to fetch user profile:",
+        response.status,
+        await response.text()
+      );
+      alert("Failed to fetch user profile.");
+    }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    alert("An error occurred while fetching user profile.");
+  }
+}
+
+async function checkUserExists(publicKey) {
+  if (!publicKey) return { exists: false, username: null };
+  console.log(`Checking existence for publicKey: ${publicKey}`);
+  try {
+    const response = await fetch(`${CHECK_USER_ENDPOINT}${publicKey}`, {
+      // Use GET request
+      method: "GET",
+      headers: {
+        Accept: "application/json", // Expect JSON response
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Check user response:", data);
+      // Assuming backend returns { exists: boolean, username: string | null }
+      return { exists: data.exists === true, username: data.username || null };
+    } else if (response.status === 404) {
+      console.log("User not found (404).");
+      return { exists: false, username: null }; // Explicitly handle 404 as user not found
+    } else {
+      console.error(
+        `Failed to check user: ${response.status} ${response.statusText}`
+      );
+      // Optional: alert user about the check failure
+      return { exists: false, username: null }; // Treat other errors as user not existing for safety
+    }
+  } catch (error) {
+    console.error("Error checking user existence:", error);
+    // Optional: alert user about the network error
+    return { exists: false, username: null }; // Treat network errors as user not existing
+  }
+}
+
+async function registerUser(publicKey, username) {
+  if (!publicKey || !username) {
+    console.error("Public key and username are required for registration.");
+    return false;
+  }
+  console.log(`Registering user: ${username} with publicKey: ${publicKey}`);
+  usernameError.style.display = "none"; // Hide error initially
+
+  try {
+    const response = await fetch(SIGNUP_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ publicKey: publicKey, username: username }), // Send as JSON
+    });
+
+    if (response.ok) {
+      const data = await response.json(); // Assuming backend confirms registration
+      console.log("User registered successfully:", data);
+      currentUsername = username; // Store the new username
+      userExists = true; // Update state
+      return true;
+    } else {
+      // --- NEW: Handle backend validation errors ---
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Registration failed. Please try again." })); // Attempt to parse error response
+      console.error(`Failed to register user: ${response.status}`, errorData);
+      usernameError.textContent =
+        errorData.message ||
+        `Registration failed (${response.status}). Try a different username?`;
+      usernameError.style.display = "block";
+      // --- END NEW ---
+      return false;
+    }
+  } catch (error) {
+    console.error("Error registering user:", error);
+    usernameError.textContent =
+      "Network error during registration. Please check your connection and try again.";
+    usernameError.style.display = "block";
+    return false;
+  }
+}
+
+function updateWalletDisplay(publicKey, username = null) {
+  walletStat.style.display = "flex";
+  // Display username if available, otherwise truncated public key
+  const displayText = username
+    ? username
+    : publicKey.slice(0, 5) + "..." + publicKey.slice(-5);
+  walletAddressDisplay.textContent = displayText;
+  walletAddressDisplay.title = `Wallet: ${publicKey}${username ? ` | User: ${username}` : ""
+    }`; // Add username to title tooltip
+}
+
+submitUsernameButton.addEventListener("click", async () => {
+  const enteredUsername = usernameInput.value.trim();
+
+  if (!enteredUsername) {
+    usernameError.textContent = "Username cannot be empty.";
+    usernameError.style.display = "block";
+    return;
+  }
+  if (enteredUsername.length < 3 || enteredUsername.length > 15) {
+    usernameError.textContent = "Username must be between 3 and 15 characters.";
+    usernameError.style.display = "block";
+    return;
+  }
+  // Basic alphanumeric check (adjust regex as needed)
+  if (!/^[a-zA-Z0-9_]+$/.test(enteredUsername)) {
+    usernameError.textContent =
+      "Username can only contain letters, numbers, and underscores.";
+    usernameError.style.display = "block";
+    return;
+  }
+
+  // Disable button while processing
+  submitUsernameButton.disabled = true;
+  submitUsernameButton.textContent = "Saving...";
+
+  const success = await registerUser(userPublicKey, enteredUsername);
+
+  // Re-enable button
+  submitUsernameButton.disabled = false;
+  submitUsernameButton.textContent = "Save Username";
+
+  if (success) {
+    usernamePromptModal.style.display = "none"; // Hide prompt on success
+    updateWalletDisplay(userPublicKey, currentUsername); // Update display with new username
+    // Optional: Automatically start the game or return to welcome screen
+    welcomeScreen.style.display = "block";
+  } else {
+    // Error message is displayed by registerUser function
+    usernameInput.focus(); // Keep focus on input if error
+  }
+});
+
 let userPublicKey = null;
 connectWalletButton.addEventListener("click", connectWallet);
 
+// Event listeners for the new buttons
+userProfileButtonGameOver.addEventListener("click", () => {
+  if (userPublicKey) {
+    displayUserProfile(userPublicKey);
+  }
+});
+
+userProfileButtonLeaderboard.addEventListener("click", () => {
+  if (userPublicKey) {
+    displayUserProfile(userPublicKey);
+  }
+});
+
+closeProfileModal.addEventListener("click", () => {
+  userProfileModal.style.display = "none";
+  gameOverScreen.style.display = "block";
+});
+
 // Function to upload scores to backend API
 async function uploadScores(scores) {
-  const apiUrl = "https://foxgame.pythonanywhere.com/api/scores"; // Replace with your actual API URL
+  const apiUrl = SCORE_UPLOAD_ENDPOINT; // Use constant
 
   if (!userPublicKey) {
-    alert("Please connect your wallet before uploading scores.");
-    return; // Exit the function if wallet is not connected
+    console.warn("Wallet not connected, cannot upload scores.");
+    // alert("Please connect your wallet before uploading scores."); // Less intrusive just to log it
+    return;
   }
+  if (scores.length === 0) {
+    console.log("No pending scores to upload.");
+    return;
+  }
+
+  console.log(`Attempting to upload ${scores.length} scores...`);
 
   try {
     const response = await fetch(apiUrl, {
@@ -76,41 +313,43 @@ async function uploadScores(scores) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(scores),
+      // Ensure scores have publicKey attached correctly
+      body: JSON.stringify(
+        scores.map((score) => ({ ...score, publicKey: userPublicKey }))
+      ),
     });
 
     if (response.ok) {
       console.log("Scores uploaded successfully!");
-      // Optionally, clear the local storage
       localStorage.removeItem("pendingScores");
     } else {
-      console.error("Failed to upload scores:", response.status);
-      alert("Failed to upload scores. Please try again later.");
+      console.error(
+        "Failed to upload scores:",
+        response.status,
+        await response.text()
+      );
+      // Don't alert here, as it might happen on page unload. Keep scores for next time.
+      // alert("Failed to upload scores. They will be saved for the next session.");
     }
   } catch (error) {
     console.error("Error uploading scores:", error);
-    alert("An error occurred while uploading scores. Please try again later.");
+    // Don't alert here either.
+    // alert("An network error occurred while uploading scores. They will be saved for the next session.");
   }
 }
 
 // Function to handle beforeunload event
-function handleBeforeUnload(event) {
-  const pendingScores = JSON.parse(localStorage.getItem("pendingScores")) || [];
-
-  if (pendingScores.length > 0) {
-    event.preventDefault(); // Standard for most browsers
-    event.returnValue =
-      "You have unsaved scores. Do you want to upload them before leaving?"; // Chrome requires returnValue
-
-    // Upload scores asynchronously
-    uploadScores(pendingScores);
-  }
-}
+function handleBeforeUnload(event) { }
 
 // Example score saving (you'll need to adapt this to your game logic)
 function saveScore(score, cherriesCollected, coinsCollected) {
+  if (!userPublicKey) {
+    console.warn("Cannot save score, user public key is not available.");
+    return; // Don't save if wallet isn't connected/key missing
+  }
+
   const scoreData = {
-    publicKey: userPublicKey, // Use the stored public key
+    publicKey: userPublicKey, // Use the currently connected public key
     score: score,
     cherriesCollected: cherriesCollected,
     coinsCollected: coinsCollected,
@@ -120,9 +359,15 @@ function saveScore(score, cherriesCollected, coinsCollected) {
   let pendingScores = JSON.parse(localStorage.getItem("pendingScores")) || [];
   pendingScores.push(scoreData);
   localStorage.setItem("pendingScores", JSON.stringify(pendingScores));
+  console.log("Score saved locally:", scoreData);
+
+  if (pendingScores.length > 0) {
+    // Upload scores asynchronously
+    uploadScores(pendingScores);
+  }
 }
 
-window.addEventListener("beforeunload", handleBeforeUnload);
+//window.addEventListener("beforeunload", handleBeforeUnload);
 
 // Function to get the current audio state from localStorage
 function getAudioState() {
@@ -221,6 +466,15 @@ let debugMode = false;
 
 // Event Listeners
 startGameButton.addEventListener("click", () => {
+  if (!userPublicKey) {
+    // If userPublicKey is null, it means the wallet is not connected
+    const confirmStart = confirm(
+      "Your score will not be stored if you play without connecting your wallet. Do you want to continue?"
+    );
+    if (!confirmStart) {
+      return; // Stop the game from starting
+    }
+  }
   welcomeScreen.style.display = "none";
   gameRunning = true;
   startGame();
@@ -687,7 +941,7 @@ if (window.innerWidth < 768) {
   welcomeScreen.style.display = "block";
 }
 
-// Disable right click
-document.addEventListener("contextmenu", (e) => {
-  e.preventDefault();
-});
+// // Disable right click
+// document.addEventListener("contextmenu", (e) => {
+//   e.preventDefault();
+// });

@@ -42,14 +42,66 @@
     <div id="gameOverScreen" class="modal" style="display: none">
       <h1>Game Over!</h1>
       <p>Your Score: <span id="finalScore">0</span></p>
-      <button id="restartButton" class="neon-button">Restart</button>
-      <button id="leaderboardButton" class="neon-button">Leaderboard</button>
+      <div class="button-row">
+        <button id="restartButton" class="neon-button">Restart</button>
+        <button id="leaderboardButton" class="neon-button">
+          Leaderboard
+        </button>
+        <button id="userProfileButtonGameOver" class="neon-button user-profile-button" style="display: none">
+          User Profile
+        </button>
+      </div>
     </div>
 
     <div id="leaderboardScreen" class="modal" style="display: none">
       <h1>Leaderboard</h1>
       <ol id="highScoresList"></ol>
-      <button id="closeLeaderboard" class="neon-button">Close</button>
+      <div class="button-row">
+        <button id="closeLeaderboard" class="neon-button">Close</button>
+        <button id="userProfileButtonLeaderboard" class="neon-button user-profile-button" style="display: none">
+          User Profile
+        </button>
+      </div>
+    </div>
+
+    <div id="userProfileModal" class="modal" style="display: none">
+      <h1>User Profile</h1>
+
+      <p>
+        <span class="icon username-icon"></span>
+        Username: <span class="profile-username">null</span>
+      </p>
+      <p>
+        <span class="icon distance-icon"></span>
+        Score: <span class="profile-score">0</span>
+      </p>
+      <p>
+        <span class="icon cherry-icon"></span>
+        Cherries Collected: <span class="profile-cherries">0</span>
+      </p>
+      <p>
+        <span class="icon coin-icon"></span>
+        Coins Collected: <span class="profile-coins">0</span>
+      </p>
+      <button id="closeProfileModal" class="neon-button">Close</button>
+    </div>
+
+    <div id="usernamePromptModal" class="modal" style="display: none">
+      <h1>Welcome!</h1>
+      <p>Please enter a username to associate with your wallet.</p>
+      <input type="text" id="usernameInput" placeholder="Enter Username" style="
+            padding: 10px;
+            margin-bottom: 1rem;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid var(--neon-blue);
+            background: var(--darker-bg);
+            color: white;
+          " />
+      <button id="submitUsernameButton" class="neon-button">
+        Save Username
+      </button>
+      <p id="usernameError" style="color: var(--neon-pink); display: none; margin-top: 0.5rem"></p>
     </div>
 
     <div id="mobileViewScreen" class="modal" style="display: none">
